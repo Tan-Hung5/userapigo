@@ -10,7 +10,7 @@ var DB *gorm.DB
 
 func InitDB() (*gorm.DB, error) {
 	// Thông tin kết nối cơ sở dữ liệu
-	dsn := "hung:dn2V3NSU13zOFq8@tcp(localhost:3306)/users_nfruit?charset=utf8mb4&parseTime=True&loc=Local"
+	dsn := "sql12672395:LDVPAReWec@tcp(sql12.freesqldatabase.com)/sql12672395?charset=utf8mb4&parseTime=True&loc=Local"
 
 	// Kết nối đến cơ sở dữ liệu
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
