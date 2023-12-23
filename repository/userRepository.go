@@ -24,7 +24,7 @@ func (r *UserRepository) GetUsers() ([]models.User, error) {
 
 	var users []models.User
 
-	err := r.db.Table("user").Unscoped().Find(&users).Error
+	err := r.db.Table("users").Unscoped().Find(&users).Error
 	if err != nil {
 		return nil, err
 	}
@@ -33,7 +33,7 @@ func (r *UserRepository) GetUsers() ([]models.User, error) {
 
 func (r *UserRepository) GetUserByID(userID int) (models.User, error) {
 	var user models.User
-	err := r.db.Table("user").First(&user, userID).Error
+	err := r.db.Table("users").First(&user, userID).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return models.User{}, errors.New("user not found")
@@ -45,7 +45,7 @@ func (r *UserRepository) GetUserByID(userID int) (models.User, error) {
 
 func (r *UserRepository) GetUserByEmail(userEmail string) (models.User, error) {
 	var user models.User
-	err := r.db.Table("user").Where("email= ?", userEmail).First(user).Error
+	err := r.db.Table("users").Where("email= ?", userEmail).First(user).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return models.User{}, errors.New("user not found")
@@ -56,7 +56,7 @@ func (r *UserRepository) GetUserByEmail(userEmail string) (models.User, error) {
 }
 
 func (r *UserRepository) AddUser(user models.CreateUser) (int, error) {
-	err := r.db.Table("user").Create(&user).Error
+	err := r.db.Table("users").Create(&user).Error
 	if err != nil {
 		return 0, err
 	}
@@ -68,7 +68,7 @@ func (r *UserRepository) UpdateUser(userID int, updatedUser models.User) error {
 
 	// Kiểm tra xem người dùng có tồn tại không
 	if err := r.db.First(&existingUser, userID).Error; err != nil {
-		r.db.Table("user").Where("id = ? ", userID).Model(&existingUser).Updates(updatedUser)
+		r.db.Table("users").Where("id = ? ", userID).Model(&existingUser).Updates(updatedUser)
 	}
 
 	return nil
@@ -85,7 +85,7 @@ func (r *UserRepository) DeleteUser(w http.ResponseWriter, res *http.Request) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
-	result := r.db.Table("user").Delete(&models.User{}, userID)
+	result := r.db.Table("users").Delete(&models.User{}, userID)
 	if result.RowsAffected == 0 {
 		http.Error(w, "User not found", http.StatusNotFound)
 		return
